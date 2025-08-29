@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+  <title><%= "Pass Safe App Secure Authentication" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= yield :head %>
+
+  <%# Includes all stylesheet files in app/assets/stylesheets %>
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+</head>
+<body>
+
+<div class="vh-100">
+  <div class="h-100 container d-flex flex-column justify-content-center align-items-center">
+<%= link_to(root_path, class: "navbar-brand") do %>
+    <h2>
+      <i class="bi bi-safe-fill me-2"></i>
+      PassSafe
+    </h2>
+    <% end %>
+    <div class="card shadow-sm w-100">
+      <div class="card-body">
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
