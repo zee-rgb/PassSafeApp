@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
-  # Defines the root path route ("/")
+  devise_for :users, path: "secure"
+
   root "pages#home"
 
   get "/home", to: "pages#home"
