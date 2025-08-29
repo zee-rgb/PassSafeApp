@@ -10,24 +10,33 @@
 
   <%= yield :head %>
 
-  <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-  <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-  <link rel="icon" href="/icon.png" type="image/png">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icon.png">
-
   <%# Includes all stylesheet files in app/assets/stylesheets %>
   <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-</head>
-<body>
-<%= render "shared/flash" %>
-<%= render "shared/navbar" %>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<div class="container">
-  <%= yield %>
-</div>
+</head>
+<body class="bg-gray-50">
+
+  <header class="border-b border-gray-200 bg-white/80 backdrop-blur">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <%= link_to root_path, class: "inline-flex items-center gap-2 text-gray-800 hover:text-gray-600 transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-indigo-600">
+          <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd"/>
+        </svg>
+        <span class="font-semibold">PassSafe</span>
+      <% end %>
+
+      <%= render "shared/navbar" %>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-6">
+    <div class="max-w-5xl mx-auto">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </div>
+  </main>
 
 </body>
 </html>
