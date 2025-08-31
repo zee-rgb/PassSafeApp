@@ -5,7 +5,32 @@
   <div class="ml-auto flex items-center gap-3">
     <% if user_signed_in? %>
       <%= link_to "Dashboard", "#", class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
-      <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+
+      <div class="relative inline-block text-left">
+        <div class="group">
+          <button type="button"
+                  class="inline-flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-gray-500 focus:outline-none focus:bg-gray-700 rounded">
+            Settings
+
+            <!-- Dropdown arrow -->
+            <svg class="w-4 h-4 ml-2 -mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 12l-5-5h10l-5 5z"/>
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            class="absolute left-0 w-fit min-w-40 mt-1 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 color-blue-500">
+            <div class="py-1">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Signed in
+                as <%= current_user.email %></a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+              <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "block w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <% else %>
       <%= link_to "Sign in", new_user_session_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
       <%= link_to "Sign up", new_user_registration_path, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors" %>
