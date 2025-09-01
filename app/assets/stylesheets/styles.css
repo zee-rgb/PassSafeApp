@@ -1,0 +1,12 @@
+/* 确保头像区域对齐 */
+.bg-gray-200.border-2.border-dashed.rounded-xl.w-16.h-16 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 优化文本排版 */
+.text-gray-600.text-sm.leading-relaxed {
+  line-height: 1.6; /* 增加行高以提高可读性 */
+  margin-top: 0.5rem; /* 增加与上方内容的间距 */
+}
