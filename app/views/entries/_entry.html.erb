@@ -20,17 +20,15 @@
     <div class="space-y-3">
       <div>
         <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Username</label>
-        <div class="flex items-center gap-2">
-          <p class="text-sm text-gray-900 font-mono bg-gray-50 px-2 py-1 rounded flex-1 truncate">••••••••</p>
-          <%= button_to "Copy", "#", method: :post, class: "px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors", title: "Copy username" %>
-        </div>
+        <%= turbo_frame_tag "entry_#{entry.id}_username_reveal" do %>
+          <%= render "entries/reveals/masked_username", entry: entry %>
+        <% end %>
       </div>
       <div>
         <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Password</label>
-        <div class="flex items-center gap-2">
-          <p class="text-sm text-gray-900 font-mono bg-gray-50 px-2 py-1 rounded flex-1 truncate">••••••••</p>
-          <%= button_to "Copy", "#", method: :post, class: "px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors", title: "Copy password" %>
-        </div>
+        <%= turbo_frame_tag "entry_#{entry.id}_password_reveal" do %>
+          <%= render "entries/reveals/masked_password", entry: entry %>
+        <% end %>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 class EntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_entry, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_entry, only: [ :show, :edit, :update, :destroy, :reveal_username, :reveal_password, :mask_username, :mask_password ]
 
   def index
     @entries = current_user.entries
@@ -65,6 +65,41 @@ class EntriesController < ApplicationController
     redirect_to entries_path, notice: "Entry deleted successfully"
   end
 
+  # Turbo reveal endpoints (POST to allow CSRF protection and logging)
+  def reveal_username
+    return head(:not_found) unless @entry
+    @value = begin
+      @entry.username
+    rescue ActiveRecord::Encryption::Errors::Decryption
+      nil
+    end
+    AuditEvent.create!(user: current_user, entry: @entry, action: "reveal_username", ip: request.remote_ip, user_agent: request.user_agent)
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
+    render "entries/reveal_username", formats: :turbo_stream, layout: false
+  end
+
+  def reveal_password
+    return head(:not_found) unless @entry
+    @value = begin
+      @entry.password
+    rescue ActiveRecord::Encryption::Errors::Decryption
+      nil
+    end
+    AuditEvent.create!(user: current_user, entry: @entry, action: "reveal_password", ip: request.remote_ip, user_agent: request.user_agent)
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, 'password')
+    render "entries/reveal_password", formats: :turbo_stream, layout: false
+  end
+
+  def mask_username
+    return head(:not_found) unless @entry
+    render "entries/mask_username", formats: :turbo_stream, layout: false
+  end
+
+  def mask_password
+    return head(:not_found) unless @entry
+    render "entries/mask_password", formats: :turbo_stream, layout: false
+  end
+
   private
 
   def entry_params
@@ -75,6 +110,6 @@ class EntriesController < ApplicationController
     @entry = current_user.entries.find_by(id: params[:id])
     return if @entry.present?
 
-    redirect_to entries_path, alert: "Entry not found"
+    redirect_to entries_path, alert: "Entry not found" and return
   end
 end

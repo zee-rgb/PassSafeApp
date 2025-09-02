@@ -126,6 +126,15 @@ config/database.yml
 config/storage.yml
 config/credentials/*.yml.enc
 
+# Rails credentials (top-level)
+/config/credentials.yml.enc
+
+# Bundler install path (optional)
+/vendor/bundle
+
+# Turbo (Hotwire) transient state
+/.turbo
+
 # Docker
 .dockerignore
 Dockerfile

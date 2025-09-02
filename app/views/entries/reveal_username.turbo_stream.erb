@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "entry_#{@entry.id}_username_reveal" do %>
+  <%= turbo_frame_tag "entry_#{@entry.id}_username_reveal" do %>
+    <%= render "entries/reveals/username", entry: @entry, value: @value %>
+  <% end %>
+<% end %>
