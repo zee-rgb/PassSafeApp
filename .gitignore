@@ -38,6 +38,11 @@
 
 # Node modules
 /node_modules
+/vendor/javascript
+/package.json
+/yarn.lock
+/pnpm-lock.yaml
+/package-lock.json
 
 # Ruby LSP
 /.ruby-lsp/
