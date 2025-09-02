@@ -86,7 +86,7 @@ class EntriesController < ApplicationController
       nil
     end
     AuditEvent.create!(user: current_user, entry: @entry, action: "reveal_password", ip: request.remote_ip, user_agent: request.user_agent)
-    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, 'password')
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
     render "entries/reveal_password", formats: :turbo_stream, layout: false
   end
 
