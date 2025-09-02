@@ -10,7 +10,7 @@
     <div class="flex items-center gap-4">
       <% if user_signed_in? %>
         <%# Authenticated user menu %>
-        <%= link_to "Dashboard", "#", class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+        <%= link_to "Dashboard", entries_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
 
         <div class="relative inline-block text-left">
           <div class="group">
