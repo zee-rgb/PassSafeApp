@@ -3,7 +3,7 @@
 
 class Rack::Attack
   # Allow all local traffic
-  safelist("allow-localhost") { |req| ["127.0.0.1", "::1"].include?(req.ip) }
+  safelist("allow-localhost") { |req| [ "127.0.0.1", "::1" ].include?(req.ip) }
 
   # Throttle login attempts by IP
   # e.g., max 5 reqs in 20 seconds (adjust as needed)

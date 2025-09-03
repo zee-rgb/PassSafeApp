@@ -18,7 +18,7 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     # In test environment, Rack::Attack might not be fully active
     # We'll just verify the requests are processed (either 422 or 429)
-    assert_includes [422, 429], response.status
+    assert_includes [ 422, 429 ], response.status
   end
 
   test "password reset requests are rate limited" do
@@ -31,7 +31,7 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     # In test environment, Rack::Attack might not be fully active
     # We'll just verify the requests are processed (either 422 or 429)
-    assert_includes [422, 429], response.status
+    assert_includes [ 422, 429 ], response.status
   end
 
   test "reveal actions are rate limited" do
@@ -45,7 +45,7 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     # In test environment, Rack::Attack might not be fully active
     # We'll just verify the requests are processed (either 200 or 429)
-    assert_includes [200, 429], response.status
+    assert_includes [ 200, 429 ], response.status
   end
 
   test "rate limiting resets after period" do

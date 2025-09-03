@@ -18,6 +18,6 @@ class ApplicationController < ActionController::Base
   # Ensure Devise redirects after sign-out/account deletion to a public page
   # so we don't hit authenticated-only root and lose the intended flash.
   def after_sign_out_path_for(_resource_or_scope)
-    home_path
+    root_path
   end
 end

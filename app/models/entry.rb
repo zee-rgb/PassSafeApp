@@ -8,7 +8,7 @@ class Entry < ApplicationRecord
 
   encrypts :username, deterministic: true
   encrypts :password
-  
+
   # Keep audit events for historical/security purposes
   has_many :audit_events
 end

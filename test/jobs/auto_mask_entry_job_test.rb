@@ -7,7 +7,7 @@ class AutoMaskEntryJobTest < ActiveJob::TestCase
   end
 
   test "job enqueues correctly" do
-    assert_enqueued_with(job: AutoMaskEntryJob, args: [@entry.id, "username"]) do
+    assert_enqueued_with(job: AutoMaskEntryJob, args: [ @entry.id, "username" ]) do
       AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
     end
   end
