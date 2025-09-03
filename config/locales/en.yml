@@ -29,3 +29,37 @@
 
 en:
   hello: "Hello world"
+  app:
+    name: "PassSafe"
+    title: "Pass Safe App"
+    auth_title: "Pass Safe App Secure Authentication"
+  nav:
+    home: "Home"
+    about: "About"
+    new_entry: "New Entry"
+    dashboard: "Dashboard"
+    menu: "Menu"
+    signed_in_as: "Signed in as"
+    profile: "Profile"
+    sign_out: "Sign out"
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    privacy: "Privacy Policy"
+    terms: "Terms of Service"
+    security: "Security"
+    help: "Help"
+  footer:
+    rights: "All rights reserved."
+    encryption_note: "Your passwords are encrypted and secure with industry-standard AES-256 encryption."
+  entries:
+    labels:
+      username: "Username"
+      password: "Password"
+    index:
+      heading: "Password Entries"
+      subtitle: "Manage your stored login credentials securely."
+      add_button: "Add New Entry"
+      empty:
+        title: "No password entries yet"
+        desc: "Get started by adding your first password entry. Your credentials will be securely encrypted and stored."
+        cta: "Add Your First Entry"

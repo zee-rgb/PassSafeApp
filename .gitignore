@@ -152,3 +152,24 @@ docker-compose*.yml
 
 # Local development
 *.local
+
+# Security-sensitive files (for password manager)
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.txt
+passwords.txt
+
+# Additional Rails 8 patterns
+/.solid_queue/
+/config/importmap.lock
+
+# Ruby version managers
+/.rvmrc
+/.rbenv-version
+
+# Profiling and debugging
+/ruby-prof/
+*.prof
+/.bundle/

@@ -1,0 +1,35 @@
+id:
+  app:
+    name: "PassSafe"
+    title: "Aplikasi Pass Safe"
+    auth_title: "Autentikasi aman Pass Safe App"
+  nav:
+    home: "Beranda"
+    about: "Tentang"
+    new_entry: "Entri baru"
+    dashboard: "Dasbor"
+    menu: "Menu"
+    signed_in_as: "Masuk sebagai"
+    profile: "Profil"
+    sign_out: "Keluar"
+    sign_in: "Masuk"
+    sign_up: "Daftar"
+    privacy: "Kebijakan Privasi"
+    terms: "Ketentuan Layanan"
+    security: "Keamanan"
+    help: "Bantuan"
+  footer:
+    rights: "Hak cipta dilindungi."
+    encryption_note: "Kata sandi Anda dienkripsi dan aman dengan enkripsi AES‑256 standar industri."
+  entries:
+    labels:
+      username: "Nama pengguna"
+      password: "Kata sandi"
+    index:
+      heading: "Daftar kata sandi"
+      subtitle: "Kelola kredensial Anda dengan aman."
+      add_button: "Tambah entri baru"
+      empty:
+        title: "Belum ada entri"
+        desc: "Mulai dengan menambahkan entri pertama Anda. Kredensial Anda akan dienkripsi dan disimpan dengan aman."
+        cta: "Tambah entri pertama"

@@ -2,14 +2,14 @@
   <div class="mb-8">
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Password Entries</h1>
-        <p class="text-gray-600">Manage your stored login credentials securely.</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= t("entries.index.heading") %></h1>
+        <p class="text-gray-600"><%= t("entries.index.subtitle") %></p>
       </div>
       <%= link_to new_entry_path, class: "inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-        Add New Entry
+        <%= t("entries.index.add_button") %>
       <% end %>
     </div>
   </div>
@@ -26,15 +26,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">No password entries yet</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= t("entries.index.empty.title") %></h3>
         <p class="text-gray-600 mb-6 max-w-md mx-auto">
-          Get started by adding your first password entry. Your credentials will be securely encrypted and stored.
+          <%= t("entries.index.empty.desc") %>
         </p>
         <%= link_to new_entry_path, class: "inline-flex items-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
-          Add Your First Entry
+          <%= t("entries.index.empty.cta") %>
         <% end %>
       </div>
     </div>

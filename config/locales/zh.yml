@@ -1,0 +1,35 @@
+zh:
+  app:
+    name: "PassSafe"
+    title: "Pass Safe 应用"
+    auth_title: "Pass Safe 应用安全认证"
+  nav:
+    home: "首页"
+    about: "关于"
+    new_entry: "新建条目"
+    dashboard: "控制台"
+    menu: "菜单"
+    signed_in_as: "当前账号"
+    profile: "个人资料"
+    sign_out: "退出"
+    sign_in: "登录"
+    sign_up: "注册"
+    privacy: "隐私政策"
+    terms: "服务条款"
+    security: "安全"
+    help: "帮助"
+  footer:
+    rights: "保留所有权利。"
+    encryption_note: "您的密码使用行业标准的 AES‑256 加密进行保护并安全存储。"
+  entries:
+    labels:
+      username: "用户名"
+      password: "密码"
+    index:
+      heading: "密码条目"
+      subtitle: "安全地管理您保存的登录凭据。"
+      add_button: "添加新条目"
+      empty:
+        title: "尚无密码条目"
+        desc: "从添加第一条密码条目开始。您的凭据将被安全加密并存储。"
+        cta: "添加第一条条目"

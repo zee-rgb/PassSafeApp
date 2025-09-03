@@ -2,20 +2,41 @@
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-4">
       <%# Main navigation links %>
-      <%= link_to "Home", root_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
-      <%= link_to "About", about_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
-      <%= link_to "New Entry", new_entry_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+      <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+      <%= link_to t("nav.about"), about_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+      <%= link_to t("nav.new_entry"), new_entry_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
     </div>
 
     <div class="flex items-center gap-4">
+      <%# Language dropdown %>
+      <div class="relative">
+        <details class="group">
+          <summary class="list-none inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-gray-600 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200">
+            <span><%= I18n.locale.to_s.upcase %></span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+            </svg>
+          </summary>
+          <div class="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-20">
+            <%= link_to "English (EN)", url_for(locale: :en), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Español (ES)", url_for(locale: :es), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Français (FR)", url_for(locale: :fr), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Português (PT)", url_for(locale: :pt), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Bahasa Indonesia (ID)", url_for(locale: :id), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "中文 (ZH)", url_for(locale: :zh), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "日本語 (JA)", url_for(locale: :ja), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+          </div>
+        </details>
+      </div>
+
       <% if user_signed_in? %>
         <%# Authenticated user menu %>
-        <%= link_to "Dashboard", entries_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+        <%= link_to t("nav.dashboard"), entries_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
 
         <div class="relative inline-block text-left">
           <div class="group">
             <button type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 transition-colors">
-              <span>Menu</span>
+              <span><%= t("nav.menu") %></span>
               <svg class="w-5 h-5 ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
               </svg>
@@ -23,20 +44,20 @@
 
             <div class="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out z-10 focus:outline-none">
               <div class="px-4 py-3">
-                <p class="text-sm text-gray-500">Signed in as</p>
+                <p class="text-sm text-gray-500"><%= t("nav.signed_in_as") %></p>
                 <p class="text-sm font-medium text-gray-900 truncate"><%= current_user.email %></p>
               </div>
               <div class="py-1 border-t border-gray-100">
-                <%= link_to "Profile", edit_user_registration_path, class: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
-                <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                <%= link_to t("nav.profile"), edit_user_registration_path, class: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                <%= link_to t("nav.sign_out"), destroy_user_session_path, data: { turbo_method: :delete }, class: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
               </div>
             </div>
           </div>
         </div>
       <% else %>
         <%# Guest menu %>
-        <%= link_to "Sign in", new_user_session_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
-        <%= link_to "Sign up", new_user_registration_path, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" %>
+        <%= link_to t("nav.sign_in"), new_user_session_path, class: "text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" %>
+        <%= link_to t("nav.sign_up"), new_user_registration_path, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" %>
       <% end %>
     </div>
   </div>

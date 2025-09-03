@@ -1,0 +1,35 @@
+ja:
+  app:
+    name: "PassSafe"
+    title: "Pass Safe アプリ"
+    auth_title: "Pass Safe アプリの安全な認証"
+  nav:
+    home: "ホーム"
+    about: "概要"
+    new_entry: "新規登録"
+    dashboard: "ダッシュボード"
+    menu: "メニュー"
+    signed_in_as: "ログイン中"
+    profile: "プロフィール"
+    sign_out: "ログアウト"
+    sign_in: "ログイン"
+    sign_up: "新規登録"
+    privacy: "プライバシーポリシー"
+    terms: "利用規約"
+    security: "セキュリティ"
+    help: "ヘルプ"
+  footer:
+    rights: "無断転載を禁じます。"
+    encryption_note: "パスワードは業界標準の AES‑256 で暗号化され安全に保存されます。"
+  entries:
+    labels:
+      username: "ユーザー名"
+      password: "パスワード"
+    index:
+      heading: "パスワード一覧"
+      subtitle: "保存された認証情報を安全に管理します。"
+      add_button: "新しいエントリを追加"
+      empty:
+        title: "まだエントリがありません"
+        desc: "最初のエントリを追加してください。認証情報は暗号化され安全に保存されます。"
+        cta: "最初のエントリを追加"

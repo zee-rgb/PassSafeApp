@@ -1,0 +1,35 @@
+fr:
+  app:
+    name: "PassSafe"
+    title: "Application Pass Safe"
+    auth_title: "Authentification sécurisée de Pass Safe App"
+  nav:
+    home: "Accueil"
+    about: "À propos"
+    new_entry: "Nouvelle entrée"
+    dashboard: "Tableau de bord"
+    menu: "Menu"
+    signed_in_as: "Connecté en tant que"
+    profile: "Profil"
+    sign_out: "Se déconnecter"
+    sign_in: "Se connecter"
+    sign_up: "S'inscrire"
+    privacy: "Politique de confidentialité"
+    terms: "Conditions d'utilisation"
+    security: "Sécurité"
+    help: "Aide"
+  footer:
+    rights: "Tous droits réservés."
+    encryption_note: "Vos mots de passe sont chiffrés et sécurisés avec un chiffrement AES‑256 de niveau industriel."
+  entries:
+    labels:
+      username: "Nom d'utilisateur"
+      password: "Mot de passe"
+    index:
+      heading: "Entrées de mots de passe"
+      subtitle: "Gérez vos identifiants en toute sécurité."
+      add_button: "Ajouter une entrée"
+      empty:
+        title: "Aucune entrée pour le moment"
+        desc: "Commencez par ajouter votre première entrée. Vos identifiants seront chiffrés et stockés en toute sécurité."
+        cta: "Ajouter votre première entrée"

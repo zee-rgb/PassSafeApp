@@ -1,0 +1,35 @@
+es:
+  app:
+    name: "PassSafe"
+    title: "Aplicación Pass Safe"
+    auth_title: "Autenticación segura de Pass Safe App"
+  nav:
+    home: "Inicio"
+    about: "Acerca de"
+    new_entry: "Nueva entrada"
+    dashboard: "Panel"
+    menu: "Menú"
+    signed_in_as: "Conectado como"
+    profile: "Perfil"
+    sign_out: "Cerrar sesión"
+    sign_in: "Iniciar sesión"
+    sign_up: "Registrarse"
+    privacy: "Política de privacidad"
+    terms: "Términos del servicio"
+    security: "Seguridad"
+    help: "Ayuda"
+  footer:
+    rights: "Todos los derechos reservados."
+    encryption_note: "Tus contraseñas están cifradas y seguras con cifrado AES-256 de nivel industrial."
+  entries:
+    labels:
+      username: "Usuario"
+      password: "Contraseña"
+    index:
+      heading: "Entradas de contraseñas"
+      subtitle: "Administra tus credenciales de forma segura."
+      add_button: "Añadir nueva entrada"
+      empty:
+        title: "Aún no hay entradas"
+        desc: "Comienza agregando tu primera entrada. Tus credenciales se cifrarán y almacenarán de forma segura."
+        cta: "Añade tu primera entrada"
