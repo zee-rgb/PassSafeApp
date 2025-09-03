@@ -3,9 +3,12 @@ Rails.application.routes.draw do
     devise_for :users, path: "secure"
 
     root "entries#index"
-
     get "/home", to: "pages#home"
     get "/about", to: "pages#about"
+    get "/privacy", to: "pages#privacy"
+    get "/terms", to: "pages#terms"
+    get "/security", to: "pages#security"
+    get "/help", to: "pages#help"
 
     resources :entries do
       member do
