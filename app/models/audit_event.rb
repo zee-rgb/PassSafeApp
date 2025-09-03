@@ -1,6 +1,6 @@
 class AuditEvent < ApplicationRecord
   belongs_to :user
-  belongs_to :entry
+  belongs_to :entry, optional: true
 
   validates :action, presence: true, length: { maximum: 50 }
   validates :ip, length: { maximum: 255 }, allow_blank: true

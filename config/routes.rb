@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   scope "(:locale)", locale: /en|es|fr|pt|id|zh|ja/ do
-    devise_for :users, path: "secure"
+    devise_for :users, path: "secure", controllers: { registrations: "users/registrations" }
+
+    # Two-step account deletion confirmation page
+    devise_scope :user do
+      get "/secure/confirm_delete", to: "users/registrations#confirm_delete", as: :confirm_delete
+    end
 
     root "entries#index"
     get "/home", to: "pages#home"

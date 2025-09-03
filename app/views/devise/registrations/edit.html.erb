@@ -41,10 +41,9 @@
   </div>
 <% end %>
 
-<h3 class="text-lg font-semibold text-gray-800 mt-8">Cancel my account</h3>
+<h3 class="text-lg font-semibold text-gray-800 mt-8"> Unhappy?</h3>
 <div class="mt-2 text-sm text-gray-600">
-  Unhappy?
-  <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-0 transition-colors" %>
+  <%= link_to "Delete my account", confirm_delete_path, class: "inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-0 transition-colors" %>
 </div>
 
 <div class="mt-6">

@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_02_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_04_080940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "audit_events", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "entry_id", null: false
+    t.bigint "entry_id"
     t.string "action", null: false
     t.string "ip"
     t.string "user_agent", limit: 1000
@@ -50,7 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_000000) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "audit_events", "entries"
+  add_foreign_key "audit_events", "entries", on_delete: :nullify
   add_foreign_key "audit_events", "users"
   add_foreign_key "entries", "users"
 end
