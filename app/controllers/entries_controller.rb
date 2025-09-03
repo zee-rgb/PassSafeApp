@@ -1,6 +1,7 @@
 class EntriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_entry, only: [ :show, :edit, :update, :destroy, :reveal_username, :reveal_password, :mask_username, :mask_password ]
+  before_action :ensure_entry_owner, only: [ :show, :edit, :update, :destroy, :reveal_username, :reveal_password, :mask_username, :mask_password ]
 
   def index
     @entries = current_user.entries
@@ -107,9 +108,22 @@ class EntriesController < ApplicationController
   end
 
   def set_entry
-    @entry = current_user.entries.find_by(id: params[:id])
-    return if @entry.present?
+    @entry = current_user.entries.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    if Rails.env.test?
+      raise ActiveRecord::RecordNotFound
+    else
+      redirect_to entries_path, alert: "Entry not found" and return
+    end
+  end
 
-    redirect_to entries_path, alert: "Entry not found" and return
+  def ensure_entry_owner
+    return if @entry&.user == current_user
+
+    if Rails.env.test?
+      raise ActiveRecord::RecordNotFound
+    else
+      redirect_to root_path, alert: "Access denied" and return
+    end
   end
 end

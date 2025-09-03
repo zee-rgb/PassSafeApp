@@ -28,5 +28,8 @@ module PassSafeApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Security middleware
+    config.middleware.use Rack::Attack
   end
 end

@@ -173,3 +173,5 @@ passwords.txt
 /ruby-prof/
 *.prof
 /.bundle/
+
+/config/credentials/production.key
