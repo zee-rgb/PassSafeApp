@@ -7,7 +7,15 @@ Rails.application.routes.draw do
       get "/secure/confirm_delete", to: "users/registrations#confirm_delete", as: :confirm_delete
     end
 
-    root "entries#index"
+    # Authenticated users land on entries, unauthenticated see a public home page
+    authenticated :user do
+      root "entries#index", as: :authenticated_root
+    end
+    unauthenticated do
+      root "pages#home", as: :unauthenticated_root
+    end
+    # Fallback root to provide root_path helper for URL generation
+    root "pages#home"
     get "/home", to: "pages#home"
     get "/about", to: "pages#about"
     get "/privacy", to: "pages#privacy"
@@ -17,6 +25,7 @@ Rails.application.routes.draw do
 
     resources :entries do
       member do
+        get :confirm_delete
         post :reveal_username
         post :reveal_password
         post :mask_username
@@ -25,3 +34,4 @@ Rails.application.routes.draw do
     end
   end
 end
+

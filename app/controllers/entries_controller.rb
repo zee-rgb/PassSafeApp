@@ -1,13 +1,17 @@
 class EntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_entry, only: [ :show, :edit, :update, :destroy, :reveal_username, :reveal_password, :mask_username, :mask_password ]
-  before_action :ensure_entry_owner, only: [ :show, :edit, :update, :destroy, :reveal_username, :reveal_password, :mask_username, :mask_password ]
+  before_action :set_entry, only: [ :show, :edit, :update, :destroy, :confirm_delete, :reveal_username, :reveal_password, :mask_username, :mask_password ]
+  before_action :ensure_entry_owner, only: [ :show, :edit, :update, :destroy, :confirm_delete, :reveal_username, :reveal_password, :mask_username, :mask_password ]
 
   def index
     @entries = current_user.entries
   end
 
   def show
+  end
+
+  # GET /entries/:id/confirm_delete
+  def confirm_delete
   end
 
   def new
