@@ -96,7 +96,7 @@ class EntryManagementTest < ActionDispatch::IntegrationTest
         password: ""
       }
     }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match(/Name can&#39;t be blank/, response.body)
     assert_match(/Url must be a valid URL/, response.body)
   end

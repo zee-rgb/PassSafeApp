@@ -24,7 +24,7 @@ class EntriesController < ApplicationController
     if @entry.save
       redirect_to root_path, notice: "Entry created successfully"
     else
-      render :new, status: :unprocessable_entity, alert: "Entry creation failed"
+      render :new, status: :unprocessable_content, alert: "Entry creation failed"
     end
   end
 

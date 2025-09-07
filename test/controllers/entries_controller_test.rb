@@ -38,7 +38,7 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference("Entry.count") do
       post "/en/entries", params: { entry: { name: "", url: "invalid-url", username: "", password: "" } }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test "should show entry when logged in as owner" do
