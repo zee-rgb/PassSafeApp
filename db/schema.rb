@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_04_080940) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_094320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_080940) do
     t.string "user_agent", limit: 1000
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_audit_events_on_created_at"
     t.index ["entry_id"], name: "index_audit_events_on_entry_id"
     t.index ["user_id", "entry_id", "action", "created_at"], name: "index_audit_events_on_actor_entry_action_time"
     t.index ["user_id"], name: "index_audit_events_on_user_id"
