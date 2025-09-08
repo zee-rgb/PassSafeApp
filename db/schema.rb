@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_09_000001) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_09_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_000001) do
     t.binary "value", null: false
     t.datetime "created_at", null: false
     t.datetime "expires_at"
+    t.integer "byte_size"
     t.index ["expires_at"], name: "index_solid_cache_entries_on_expires_at"
     t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
