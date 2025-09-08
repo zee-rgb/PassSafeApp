@@ -7,20 +7,23 @@ if defined?(SolidQueue)
     # Test environment uses the test adapter
     Rails.application.config.active_job.queue_adapter = :test
   else
-    # Production and development use SolidQueue with primary database
     begin
+      # Configure SolidQueue to use the primary database
       SolidQueue.connects_to = :primary
-      
-      # Configure SolidQueue-specific settings
-      SolidQueue.supervisor_polling_interval = 1 # seconds
-      SolidQueue.shutdown_timeout = 5 # seconds
-      
-      # Log the configuration
+
+      # Only set these if the methods exist (they were removed in newer versions)
+      if SolidQueue.respond_to?(:supervisor_polling_interval=)
+        SolidQueue.supervisor_polling_interval = 1 # seconds
+      end
+
+      if SolidQueue.respond_to?(:shutdown_timeout=)
+        SolidQueue.shutdown_timeout = 5 # seconds
+      end
+
       Rails.logger.info "[SolidQueue] Configured with primary database"
     rescue => e
       Rails.logger.error "[SolidQueue] Failed to configure: #{e.message}"
-      Rails.logger.error e.backtrace.join("\n")
-      
+
       # Fall back to async adapter if SolidQueue configuration fails
       Rails.application.config.active_job.queue_adapter = :async
       Rails.logger.warn "[SolidQueue] Falling back to :async adapter"
