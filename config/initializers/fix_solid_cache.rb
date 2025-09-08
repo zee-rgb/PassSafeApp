@@ -26,6 +26,18 @@ Rails.application.config.after_initialize do
 
           Rails.logger.info "Successfully added key_hash column to solid_cache_entries table."
         end
+
+        # Check if byte_size column exists
+        column_exists = ActiveRecord::Base.connection.column_exists?(:solid_cache_entries, :byte_size)
+
+        if column_exists
+          Rails.logger.info "Column byte_size already exists in solid_cache_entries table."
+        else
+          Rails.logger.info "Adding byte_size column to solid_cache_entries table..."
+          ActiveRecord::Base.connection.execute("ALTER TABLE solid_cache_entries ADD COLUMN byte_size INTEGER")
+
+          Rails.logger.info "Successfully added byte_size column to solid_cache_entries table."
+        end
       else
         Rails.logger.info "Table solid_cache_entries does not exist yet. Skipping fix."
       end
