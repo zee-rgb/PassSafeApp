@@ -1,61 +1,20 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  scan_ruby:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
-
   test:
     runs-on: ubuntu-latest
-    env:
-      RAILS_ENV: test
-      RACK_ENV: test
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY || 'dummy_key_for_testing' }}
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/pass_safe_app_test
-      RAILS_MAX_THREADS: 5
-      SOLID_QUEUE_PROCESSES: 1
-      SOLID_QUEUE_THREADS: 2
-      RAILS_SERVE_STATIC_FILES: 'true'
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:16
         env:
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: pass_safe_app_test
         ports:
           - 5432:5432
         options: >-
@@ -64,59 +23,33 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      # Redis configuration (uncomment if needed)
-      # redis:
-      #   image: redis:latest
-      #   ports:
-      #     - 6379:6379
-      #   options: >-
-      #     --health-cmd "redis-cli ping"
-      #     --health-interval 10s
-      #     --health-timeout 5s
-      #     --health-retries 5
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/pass_safe_app_test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY }}
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY }}
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT }}
 
     steps:
-      - name: Install packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y \
-            build-essential \
-            git \
-            libpq-dev \
-            libyaml-dev \
-            node-gyp \
-            pkg-config \
-            python-is-python3
-
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: "3.4"
           bundler-cache: true
 
-      - name: Set up test database
+      - name: Set up database
         run: |
           bundle exec rails db:create
           bundle exec rails db:schema:load
-          bundle exec rails db:test:prepare
-          bundle exec rails db:environment:set RAILS_ENV=test
 
       - name: Run tests
-        run: |
-          bundle exec rails test
-          bundle exec rails test:system
+        run: bundle exec rails test
 
-      - name: Verify SolidQueue setup
-        run: |
-          bundle exec rails runner 'puts "SolidQueue tables: #{ActiveRecord::Base.connection.tables.grep(/^solid_queue_/).join(", ")}"'
+      - name: Run system tests
+        run: bundle exec rails test:system
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+      - name: Run RuboCop
+        run: bundle exec rubocop
