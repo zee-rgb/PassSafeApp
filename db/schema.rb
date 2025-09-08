@@ -41,11 +41,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_000001) do
 
   create_table "solid_cache_entries", force: :cascade do |t|
     t.string "key", null: false
+    t.string "key_hash", null: false
     t.binary "value", null: false
     t.datetime "created_at", null: false
     t.datetime "expires_at"
     t.index ["expires_at"], name: "index_solid_cache_entries_on_expires_at"
-    t.index ["key"], name: "index_solid_cache_entries_on_key", unique: true
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "solid_cache_versions", force: :cascade do |t|
