@@ -4,15 +4,36 @@ default: &default
       batch_size: 500
   workers:
     - queues: "*"
-      threads: 3
-      processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
+      threads: <%= ENV.fetch("SOLID_QUEUE_THREADS", 3).to_i %>
+      processes: <%= ENV.fetch("SOLID_QUEUE_PROCESSES", 1).to_i %>
       polling_interval: 0.1
 
+# Development environment uses the same settings as default
 development:
   <<: *default
 
+# Test environment uses minimal resources
 test:
-  <<: *default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 10
+  workers:
+    - queues: "*"
+      threads: 1
+      processes: 1
+      polling_interval: 0.5
 
+# Production environment with optimized settings
 production:
-  <<: *default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 500
+  workers:
+    - queues: "default"
+      threads: <%= ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i %>
+      processes: <%= ENV.fetch("SOLID_QUEUE_PROCESSES", 2).to_i %>
+      polling_interval: 0.1
+    - queues: "mailers"
+      threads: 2
+      processes: 1
+      polling_interval: 1.0

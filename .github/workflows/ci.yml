@@ -39,26 +39,52 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      DATABASE_URL: postgres://${{ secrets.TEST_DB_USER || 'postgres' }}:${{ secrets.TEST_DB_PASSWORD || 'postgres' }}@localhost:5432/${{ secrets.TEST_DB_NAME || 'pass_safe_app_test' }}
+      RAILS_MAX_THREADS: 5
+      SOLID_QUEUE_PROCESSES: 1
+      SOLID_QUEUE_THREADS: 2
 
     services:
       postgres:
-        image: postgres
+        image: postgres:latest
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pass_safe_app_test
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
+      # Redis configuration (uncomment if needed)
       # redis:
-      #   image: redis
+      #   image: redis:latest
       #   ports:
       #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+      #   options: >-
+      #     --health-cmd "redis-cli ping"
+      #     --health-interval 10s
+      #     --health-timeout 5s
+      #     --health-retries 5
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev node-gyp pkg-config python-is-python3 google-chrome-stable
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential \
+            git \
+            libpq-dev \
+            libyaml-dev \
+            node-gyp \
+            pkg-config \
+            python-is-python3
 
       - name: Checkout code
         uses: actions/checkout@v5
@@ -69,12 +95,21 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up test database
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+          bundle exec rails db:migrate
+
       - name: Run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: bundle exec rails test
+
+      - name: Run system tests
+        run: bundle exec rails test:system
+
+      - name: Verify SolidQueue setup
+        run: |
+          bundle exec rails runner 'puts "SolidQueue tables: #{ActiveRecord::Base.connection.tables.grep(/^solid_queue_/).join(", ")}"'
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

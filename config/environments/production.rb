@@ -16,7 +16,20 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
 
   # Cache assets for far-future expiry since they are all digest stamped.
-  config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = { 
+    'Cache-Control' => 'public, max-age=31536000, immutable',
+    'X-Content-Type-Options' => 'nosniff'
+  }
+  
+  # Enable serving of static files from the `/public` folder
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
+  
+  # Compress CSS using a preprocessor
+  config.assets.css_compressor = :sass
+  
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server
+  # config.asset_host = 'https://your-asset-server.com'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -49,9 +62,18 @@ Rails.application.configure do
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :solid_cache_store
 
-  # Configure Active Job to use SolidQueue
+  # Configure Active Job to use SolidQueue with primary database
   config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  
+  # Configure SolidQueue to use the primary database
+  if defined?(SolidQueue)
+    SolidQueue.connects_to = :primary
+    
+    # Set reasonable timeouts
+    if SolidQueue.respond_to?(:shutdown_timeout=)
+      SolidQueue.shutdown_timeout = 30 # seconds
+    end
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

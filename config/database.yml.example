@@ -1,0 +1,34 @@
+# Example database configuration. Copy this file to config/database.yml and customize as needed.
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host: localhost
+  port: 5432
+
+# Development database configuration
+development:
+  <<: *default
+  database: pass_safe_app_development
+
+# Test database configuration
+test:
+  <<: *default
+  database: pass_safe_app_test
+  min_messages: WARNING  # Reduce log noise in test
+
+# Production database configuration
+# Use environment variables for production credentials
+production:
+  <<: *default
+  database: <%= ENV['DATABASE_NAME'] || 'pass_safe_app_production' %>
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  port: <%= ENV['DATABASE_PORT'] || 5432 %>
+  # Add SSL configuration for production
+  # sslmode: require
+  # sslrootcert: config/ca-certificate.crt

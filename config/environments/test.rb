@@ -38,6 +38,25 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
+  
+  # Configure Active Job test adapter
+  config.active_job.queue_adapter = :test
+  
+  # Configure SolidQueue for test environment
+  if defined?(SolidQueue)
+    # Ensure we're using the test adapter
+    config.active_job.queue_adapter = :test
+    
+    # Disable background job processing in test
+    if SolidQueue.respond_to?(:use_main_thread=)
+      SolidQueue.use_main_thread = true
+    end
+    
+    # Pause all queues in test
+    if SolidQueue.respond_to?(:pause_all_queues!)
+      SolidQueue.pause_all_queues!
+    end
+  end
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
