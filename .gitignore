@@ -161,6 +161,17 @@ docker-compose*.yml
 secrets.txt
 passwords.txt
 
+# Temporary files and scripts
+/script/test_encryption.rb
+/test_encryption.rb
+puts*.log
+
+# Documentation with sensitive information
+GITHUB_SETUP.md
+DEPLOYMENT_TROUBLESHOOTING.md
+*SETUP*.md
+*_SETUP.md
+
 # Additional Rails 8 patterns
 /.solid_queue/
 /config/importmap.lock
