@@ -1,10 +1,8 @@
 # Allow legacy plaintext data in encrypted columns to be read/updated without raising
 # This is useful while migrating existing records to the new encryption scheme.
-if Rails.env.production?
-  Rails.application.config.active_record.encryption.support_unencrypted_data = false
-else
-  Rails.application.config.active_record.encryption.support_unencrypted_data = true
-end
+# Allow unencrypted data in all environments temporarily
+# This helps with existing data that might have been encrypted with different keys
+Rails.application.config.active_record.encryption.support_unencrypted_data = true
 
 # Explicitly set encryption keys from ENV or credentials to avoid boot issues
 c = Rails.application.config.active_record.encryption

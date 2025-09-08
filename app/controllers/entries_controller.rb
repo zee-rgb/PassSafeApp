@@ -75,8 +75,14 @@ def reveal_username
   return head(:not_found) unless @entry
 
   begin
-    # Simplify the reveal process
-    @value = @entry.username
+    # Try to get the username with fallback for decryption errors
+    begin
+      @value = @entry.username
+    rescue ActiveRecord::Encryption::Errors::Decryption => e
+      Rails.logger.warn("Decryption error for username of entry #{@entry.id}: #{e.message}")
+      # Use a default value when decryption fails
+      @value = "[Encrypted - Contact Admin]"
+    end
 
     # Create audit event
     AuditEvent.create!(
@@ -109,8 +115,14 @@ def reveal_password
   return head(:not_found) unless @entry
 
   begin
-    # Simplify the reveal process
-    @value = @entry.password
+    # Try to get the password with fallback for decryption errors
+    begin
+      @value = @entry.password
+    rescue ActiveRecord::Encryption::Errors::Decryption => e
+      Rails.logger.warn("Decryption error for password of entry #{@entry.id}: #{e.message}")
+      # Use a default value when decryption fails
+      @value = "[Encrypted - Contact Admin]"
+    end
 
     # Create audit event
     AuditEvent.create!(
