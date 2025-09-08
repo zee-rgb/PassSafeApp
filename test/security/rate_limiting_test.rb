@@ -40,12 +40,12 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     # Make multiple reveal requests
     11.times do |i|
-      post "/en/entries/#{entry.id}/reveal_username"
+      post "/en/entries/#{entry.id}/reveal_username", as: :json
     end
 
     # In test environment, Rack::Attack might not be fully active
-    # We'll just verify the requests are processed (either 200, 429, or 500)
-    assert_includes [ 200, 429, 500 ], response.status
+    # We'll just verify the requests are processed (either 200 or 429)
+    assert_includes [ 200, 429 ], response.status
   end
 
   test "rate limiting resets after period" do

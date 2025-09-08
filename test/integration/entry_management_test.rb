@@ -55,24 +55,28 @@ class EntryManagementTest < ActionDispatch::IntegrationTest
     entry = entries(:one)
 
     # Reveal username
-    post "/en/entries/#{entry.id}/reveal_username"
+    post "/en/entries/#{entry.id}/reveal_username", as: :json
     assert_response :success
-    assert_match(/testuser1/, response.body)
+    json_response = JSON.parse(response.body)
+    assert_equal "testuser1", json_response["value"]
 
     # Mask username
-    post "/en/entries/#{entry.id}/mask_username"
+    post "/en/entries/#{entry.id}/mask_username", as: :json
     assert_response :success
-    assert_match(/••••••••/, response.body)
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response["masked"]
 
     # Reveal password
-    post "/en/entries/#{entry.id}/reveal_password"
+    post "/en/entries/#{entry.id}/reveal_password", as: :json
     assert_response :success
-    assert_match(/securepassword123/, response.body)
+    json_response = JSON.parse(response.body)
+    assert_equal "securepassword123", json_response["value"]
 
     # Mask password
-    post "/en/entries/#{entry.id}/mask_password"
+    post "/en/entries/#{entry.id}/mask_password", as: :json
     assert_response :success
-    assert_match(/••••••••/, response.body)
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response["masked"]
   end
 
   test "user can only see their own entries" do

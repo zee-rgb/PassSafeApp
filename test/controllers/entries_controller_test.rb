@@ -91,49 +91,57 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should reveal username when logged in as owner" do
     sign_in @user
-    post "/en/entries/#{@entry.id}/reveal_username"
+    post "/en/entries/#{@entry.id}/reveal_username", as: :json
     assert_response :success
+    json_response = JSON.parse(response.body)
+    assert_equal "testuser1", json_response["value"]
   end
 
   test "should reveal password when logged in as owner" do
     sign_in @user
-    post "/en/entries/#{@entry.id}/reveal_password"
+    post "/en/entries/#{@entry.id}/reveal_password", as: :json
     assert_response :success
+    json_response = JSON.parse(response.body)
+    assert_equal "securepassword123", json_response["value"]
   end
 
   test "should not reveal username when logged in as different user" do
     sign_in @other_user
-    post "/en/entries/#{@entry.id}/reveal_username"
+    post "/en/entries/#{@entry.id}/reveal_username", as: :json
     assert_response :not_found
   end
 
   test "should not reveal password when logged in as different user" do
     sign_in @other_user
-    post "/en/entries/#{@entry.id}/reveal_password"
+    post "/en/entries/#{@entry.id}/reveal_password", as: :json
     assert_response :not_found
   end
 
   test "should mask username when logged in as owner" do
     sign_in @user
-    post "/en/entries/#{@entry.id}/mask_username"
+    post "/en/entries/#{@entry.id}/mask_username", as: :json
     assert_response :success
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response["masked"]
   end
 
   test "should mask password when logged in as owner" do
     sign_in @user
-    post "/en/entries/#{@entry.id}/mask_password"
+    post "/en/entries/#{@entry.id}/mask_password", as: :json
     assert_response :success
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response["masked"]
   end
 
   test "should not mask username when logged in as different user" do
     sign_in @other_user
-    post "/en/entries/#{@entry.id}/mask_username"
+    post "/en/entries/#{@entry.id}/mask_username", as: :json
     assert_response :not_found
   end
 
   test "should not mask password when logged in as different user" do
     sign_in @other_user
-    post "/en/entries/#{@entry.id}/mask_password"
+    post "/en/entries/#{@entry.id}/mask_password", as: :json
     assert_response :not_found
   end
 end
