@@ -23,7 +23,7 @@ class AutoMaskEntryJobTest < ActiveJob::TestCase
   test "job handles missing entry gracefully" do
     assert_nothing_raised do
       perform_enqueued_jobs do
-        AutoMaskEntryJob.perform_later(99999, "username")
+        AutoMaskEntryJob.perform_later(99_999, "username")
       end
     end
   end
@@ -40,7 +40,9 @@ class AutoMaskEntryJobTest < ActiveJob::TestCase
   test "job broadcasts turbo stream for password" do
     # Test that the job runs without error
     assert_nothing_raised do
-      AutoMaskEntryJob.perform_now(@entry.id, "password")
+      perform_enqueued_jobs do
+        AutoMaskEntryJob.perform_later(@entry.id, "password")
+      end
     end
   end
 end

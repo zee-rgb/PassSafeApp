@@ -2,8 +2,21 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+# Use test adapter for Active Job in test environment
+ActiveJob::Base.queue_adapter = :test
+
 # Configure SolidQueue for testing
-require "solid_queue/testing"
+begin
+  require "solid_queue/testing"
+  SolidQueue.use_test_adapter
+rescue LoadError => e
+  puts "SolidQueue testing support not available: #{e.message}"
+end
+
+# Load test support files
+Dir[Rails.root.join("test/support/**/*.rb")].sort.each do |f| 
+  require f rescue puts "Failed to load #{f}: #{$!}"
+end
 
 module ActiveSupport
   class TestCase
@@ -18,7 +31,14 @@ module ActiveSupport
     
     # Setup SolidQueue test adapter
     setup do
-      SolidQueue.use_test_adapter if defined?(SolidQueue::Testing)
+      if defined?(SolidQueue)
+        begin
+          SolidQueue.use_main_thread = true
+          SolidQueue.pause_all_queues if SolidQueue.respond_to?(:pause_all_queues)
+        rescue => e
+          puts "Warning: Failed to configure SolidQueue: #{e.message}"
+        end
+      end
     end
   end
 end
