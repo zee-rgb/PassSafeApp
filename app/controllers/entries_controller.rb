@@ -75,7 +75,8 @@ def reveal_username
   return head(:not_found) unless @entry
   @value = begin
     @entry.username
-  rescue ActiveRecord::Encryption::Errors::Decryption
+  rescue => e
+    Rails.logger.error("Error revealing username: #{e.class} - #{e.message}")
     nil
   end
   AuditEvent.create!(
@@ -93,7 +94,8 @@ def reveal_password
   return head(:not_found) unless @entry
   @value = begin
     @entry.password
-  rescue ActiveRecord::Encryption::Errors::Decryption
+  rescue => e
+    Rails.logger.error("Error revealing password: #{e.class} - #{e.message}")
     nil
   end
   AuditEvent.create!(
@@ -120,7 +122,7 @@ end
   private
 
   def entry_params
-    params.expect(entry: [ :name, :url, :username, :password ])
+    params.require(:entry).permit(:name, :url, :username, :password)
   end
 
   def set_entry
