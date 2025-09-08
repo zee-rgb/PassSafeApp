@@ -24,6 +24,7 @@ function setupRevealHide(type, entryId, csrfToken) {
     const revealBtn = document.getElementById(`reveal-${type}-btn`);
     const hideBtn = document.getElementById(`hide-${type}-btn`);
     const container = document.getElementById(`${type}-container`);
+    let autoHideTimer = null; // Add timer variable for auto-hide feature
 
     if (!revealBtn || !hideBtn || !container) return;
 
@@ -45,6 +46,15 @@ function setupRevealHide(type, entryId, csrfToken) {
                 }
                 revealBtn.style.display = "none";
                 hideBtn.style.display = "inline-block";
+
+                // Set auto-hide timer for 5 seconds
+                if (autoHideTimer) {
+                    clearTimeout(autoHideTimer);
+                }
+                autoHideTimer = setTimeout(function() {
+                    // Auto-hide after 5 seconds
+                    hideBtn.click();
+                }, 5000);
             })
             .catch((error) => {
                 console.error(`Error revealing ${type}:`, error);
@@ -53,6 +63,12 @@ function setupRevealHide(type, entryId, csrfToken) {
 
     // Hide button click handler
     hideBtn.addEventListener("click", function() {
+        // Clear the auto-hide timer if it exists
+        if (autoHideTimer) {
+            clearTimeout(autoHideTimer);
+            autoHideTimer = null;
+        }
+
         fetch(`/en/entries/${entryId}/mask_${type}`, {
                 method: "POST",
                 headers: {
