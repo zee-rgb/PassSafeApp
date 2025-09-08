@@ -41,11 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RAILS_ENV: test
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-      DATABASE_URL: postgres://${{ secrets.TEST_DB_USER || 'postgres' }}:${{ secrets.TEST_DB_PASSWORD || 'postgres' }}@localhost:5432/${{ secrets.TEST_DB_NAME || 'pass_safe_app_test' }}
+      RACK_ENV: test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY || 'dummy_key_for_testing' }}
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/pass_safe_app_test
       RAILS_MAX_THREADS: 5
       SOLID_QUEUE_PROCESSES: 1
       SOLID_QUEUE_THREADS: 2
+      RAILS_SERVE_STATIC_FILES: 'true'
 
     services:
       postgres:
@@ -99,13 +101,13 @@ jobs:
         run: |
           bundle exec rails db:create
           bundle exec rails db:schema:load
-          bundle exec rails db:migrate
+          bundle exec rails db:test:prepare
+          bundle exec rails db:environment:set RAILS_ENV=test
 
       - name: Run tests
-        run: bundle exec rails test
-
-      - name: Run system tests
-        run: bundle exec rails test:system
+        run: |
+          bundle exec rails test
+          bundle exec rails test:system
 
       - name: Verify SolidQueue setup
         run: |

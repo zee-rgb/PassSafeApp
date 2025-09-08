@@ -44,32 +44,18 @@ Rails.application.configure do
 
   # Configure SolidQueue for test environment
   if defined?(SolidQueue)
-    # Ensure we're using the test adapter
+    # Use the test adapter which runs jobs inline
     config.active_job.queue_adapter = :test
 
-    # Disable background job processing in test
+    # Configure SolidQueue to run in the main thread for tests
     if SolidQueue.respond_to?(:use_main_thread=)
       SolidQueue.use_main_thread = true
     end
 
-    # Load SolidQueue test helpers
-    require "solid_queue/test_helpers"
-
-    # Configure SolidQueue to use the test adapter
-    SolidQueue.use_test_adapter
-
-    # Set test mode options
-    SolidQueue.test_mode = :inline
-
-    # Include test helpers in test cases
-    ActiveSupport.on_load(:active_support_test_case) do
-      include SolidQueue::TestHelpers
+    # Configure test mode if available
+    if SolidQueue.respond_to?(:test_mode=)
+      SolidQueue.test_mode = :inline
     end
-  end
-
-  # Pause all queues in test
-  if defined?(SolidQueue) && SolidQueue.respond_to?(:pause_all_queues!)
-    SolidQueue.pause_all_queues!
   end
 
   # Print deprecation notices to the stderr.
