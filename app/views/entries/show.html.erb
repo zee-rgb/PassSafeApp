@@ -19,12 +19,14 @@
           </div>
         </div>
 
+        <input type="hidden" id="entry-id" value="<%= @entry.id %>">
+
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
           <div id="username-container" class="flex items-center gap-3">
             <p class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
             <button id="reveal-username-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Reveal</button>
-            <button id="hide-username-btn" style="display: none;" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Hide</button>
+            <button id="hide-username-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50 hidden">Hide</button>
           </div>
         </div>
 
@@ -33,86 +35,11 @@
           <div id="password-container" class="flex items-center gap-3">
             <p class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
             <button id="reveal-password-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Reveal</button>
-            <button id="hide-password-btn" style="display: none;" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Hide</button>
+            <button id="hide-password-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50 hidden">Hide</button>
           </div>
         </div>
 
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const entryId = <%= @entry.id %>;
-
-            // Username reveal/hide
-            document.getElementById('reveal-username-btn').addEventListener('click', function() {
-              fetch(`/en/entries/${entryId}/reveal_username`, {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-Token': csrfToken,
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                document.querySelector('#username-container p').textContent = data.value;
-                document.getElementById('reveal-username-btn').style.display = 'none';
-                document.getElementById('hide-username-btn').style.display = 'inline-block';
-              });
-            });
-
-            document.getElementById('hide-username-btn').addEventListener('click', function() {
-              fetch(`/en/entries/${entryId}/mask_username`, {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-Token': csrfToken,
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                document.querySelector('#username-container p').textContent = '••••••••';
-                document.getElementById('reveal-username-btn').style.display = 'inline-block';
-                document.getElementById('hide-username-btn').style.display = 'none';
-              });
-            });
-
-            // Password reveal/hide
-            document.getElementById('reveal-password-btn').addEventListener('click', function() {
-              fetch(`/en/entries/${entryId}/reveal_password`, {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-Token': csrfToken,
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                document.querySelector('#password-container p').textContent = data.value;
-                document.getElementById('reveal-password-btn').style.display = 'none';
-                document.getElementById('hide-password-btn').style.display = 'inline-block';
-              });
-            });
-
-            document.getElementById('hide-password-btn').addEventListener('click', function() {
-              fetch(`/en/entries/${entryId}/mask_password`, {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-Token': csrfToken,
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                document.querySelector('#password-container p').textContent = '••••••••';
-                document.getElementById('reveal-password-btn').style.display = 'inline-block';
-                document.getElementById('hide-password-btn').style.display = 'none';
-              });
-            });
-          });
-        </script>
+        <%= javascript_include_tag "controllers/reveal_controller" %>
       </div>
 
       <div class="flex items-center justify-between mt-8">
