@@ -95,7 +95,7 @@ def reveal_username
 
     # Support both HTML and Turbo Stream formats for tests
     respond_to do |format|
-      format.html { render turbo_stream: render_to_string(formats: [:turbo_stream]) }
+      format.html { render turbo_stream: render_to_string(formats: [ :turbo_stream ]) }
       format.turbo_stream
     end
   rescue => e
@@ -129,7 +129,7 @@ def reveal_password
 
     # Support both HTML and Turbo Stream formats for tests
     respond_to do |format|
-      format.html { render turbo_stream: render_to_string(formats: [:turbo_stream]) }
+      format.html { render turbo_stream: render_to_string(formats: [ :turbo_stream ]) }
       format.turbo_stream
     end
   rescue => e
