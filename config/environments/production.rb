@@ -9,6 +9,12 @@ Rails.application.configure do
   # Eager load code on boot for better performance and memory savings (ignored by Rake tasks).
   config.eager_load = true
 
+  # Required for production. You can use `rails secret` to generate a secret key.
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || ENV["RAILS_MASTER_KEY"]
+
+  # Ensure this is set for production
+  config.require_master_key = true
+
   # Full error reports are disabled.
   config.consider_all_requests_local = false
 
@@ -17,19 +23,27 @@ Rails.application.configure do
 
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.enabled = true
-  config.public_file_server.headers = { 
-    'Cache-Control' => 'public, max-age=31536000, immutable',
-    'X-Content-Type-Options' => 'nosniff'
+  config.public_file_server.headers = {
+    "Cache-Control" => "public, max-age=31536000, immutable",
+    "X-Content-Type-Options" => "nosniff"
   }
-  
+
   # Enable serving of static files from the `/public` folder
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
-  
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
+
   # Compress CSS using a preprocessor
   config.assets.css_compressor = :sass
-  
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  # config.asset_host = 'https://your-asset-server.com'
+
+  # Enable asset compilation in production
+  config.assets.compile = true
+  config.assets.digest = true
+  config.assets.debug = false
+  config.assets.quiet = true
+
+  # Set asset host
+  if ENV["ASSET_HOST"].present?
+    config.asset_host = ENV["ASSET_HOST"]
+  end
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -64,11 +78,11 @@ Rails.application.configure do
 
   # Configure Active Job to use SolidQueue with primary database
   config.active_job.queue_adapter = :solid_queue
-  
+
   # Configure SolidQueue to use the primary database
   if defined?(SolidQueue)
     SolidQueue.connects_to = :primary
-    
+
     # Set reasonable timeouts
     if SolidQueue.respond_to?(:shutdown_timeout=)
       SolidQueue.shutdown_timeout = 30 # seconds
@@ -78,6 +92,9 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
+
+  # Set up the mailer for sending emails
+  config.action_mailer.perform_caching = false
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {

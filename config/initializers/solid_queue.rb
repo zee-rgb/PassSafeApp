@@ -8,7 +8,7 @@ if defined?(SolidQueue)
     begin
       # Set the queue adapter
       Rails.application.config.active_job.queue_adapter = :solid_queue
-      
+
       # Configure SolidQueue to use the primary database
       # This will be overridden in production.rb if needed
       unless Rails.env.production?

@@ -2,7 +2,7 @@ require "test_helper"
 
 class SolidQueueTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
-  
+
   test "should use test adapter in test environment" do
     assert_equal :test, ActiveJob::Base.queue_adapter_name.to_sym
   end
@@ -24,15 +24,15 @@ class SolidQueueTest < ActiveSupport::TestCase
     assert_enqueued_with(job: AutoMaskEntryJob) do
       AutoMaskEntryJob.perform_later(1, "test")
     end
-    
+
     # Clear enqueued jobs
     queue_adapter.enqueued_jobs.clear
-    
+
     # Test performing the job
     perform_enqueued_jobs do
       AutoMaskEntryJob.perform_later(1, "test")
     end
-    
+
     # Should have one performed job
     assert_performed_jobs 1
   end
