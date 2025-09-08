@@ -93,11 +93,11 @@ def reveal_username
       user_agent: request.user_agent
     )
 
-    # Support both HTML and Turbo Stream formats for tests
-    respond_to do |format|
-      format.html { render turbo_stream: render_to_string(formats: [ :turbo_stream ]) }
-      format.turbo_stream
-    end
+    # Schedule auto-mask job
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
+
+    # Return the revealed value as JSON
+    render json: { value: @value }
   rescue => e
     Rails.logger.error("Error in reveal_username for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
@@ -127,11 +127,11 @@ def reveal_password
       user_agent: request.user_agent
     )
 
-    # Support both HTML and Turbo Stream formats for tests
-    respond_to do |format|
-      format.html { render turbo_stream: render_to_string(formats: [ :turbo_stream ]) }
-      format.turbo_stream
-    end
+    # Schedule auto-mask job
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
+
+    # Return the revealed value as JSON
+    render json: { value: @value }
   rescue => e
     Rails.logger.error("Error in reveal_password for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
@@ -141,12 +141,12 @@ end
 
   def mask_username
     return head(:not_found) unless @entry
-    render "entries/mask_username", formats: :turbo_stream, layout: false
+    render json: { masked: true }
   end
 
   def mask_password
     return head(:not_found) unless @entry
-    render "entries/mask_password", formats: :turbo_stream, layout: false
+    render json: { masked: true }
   end
 
   private
