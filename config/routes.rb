@@ -4,6 +4,9 @@ Rails.application.routes.draw do
     get "diagnostic/encryption_keys"
   end
 
+  # Temporary database fix route - REMOVE AFTER USE
+  get "database_fix/solid_cache", to: "database_fix#fix_solid_cache"
+
   scope "(:locale)", locale: /en|es|fr|pt|id|zh|ja/ do
     devise_for :users, path: "secure", controllers: {
       registrations: "users/registrations",
