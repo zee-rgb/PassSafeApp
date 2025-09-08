@@ -10,7 +10,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Required for production. You can use `rails secret` to generate a secret key.
-  config.secret_key_base = ENV["SECRET_KEY_BASE"] || ENV["RAILS_MASTER_KEY"]
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || Rails.application.credentials.secret_key_base
 
   # Ensure this is set for production
   config.require_master_key = true
@@ -81,7 +81,8 @@ Rails.application.configure do
 
   # Configure SolidQueue to use the primary database
   if defined?(SolidQueue)
-    SolidQueue.connects_to = :primary
+    # SolidQueue will use the default database connection
+    # No explicit connects_to configuration needed for single database setup
 
     # Set reasonable timeouts
     if SolidQueue.respond_to?(:shutdown_timeout=)
