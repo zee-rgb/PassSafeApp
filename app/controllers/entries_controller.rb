@@ -75,17 +75,8 @@ def reveal_username
   return head(:not_found) unless @entry
 
   begin
-    Rails.logger.info("Revealing username for entry #{@entry.id} by user #{current_user.id}")
-
-    # Check encryption keys before attempting to decrypt
-    Rails.logger.info("Encryption keys present: " +
-                     "primary=#{ActiveRecord::Encryption.config.primary_key.present?}, " +
-                     "deterministic=#{ActiveRecord::Encryption.config.deterministic_key.present?}, " +
-                     "salt=#{ActiveRecord::Encryption.config.key_derivation_salt.present?}")
-
-    # Try to decrypt the username
+    # Simplify the reveal process
     @value = @entry.username
-    Rails.logger.info("Successfully decrypted username for entry #{@entry.id}")
 
     # Create audit event
     AuditEvent.create!(
@@ -95,16 +86,18 @@ def reveal_username
       ip: request.remote_ip,
       user_agent: request.user_agent
     )
-    Rails.logger.info("Created audit event for reveal_username")
 
-    # Schedule auto-mask job
-    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
-    Rails.logger.info("Scheduled auto-mask job for username")
-
-    # Render the turbo stream template
-    Rails.logger.info("Rendering reveal_username turbo_stream template")
-    render "entries/reveal_username", formats: :turbo_stream, layout: false
-    Rails.logger.info("Successfully rendered reveal_username template")
+    # Render the turbo stream template directly
+    render inline: "<%= turbo_stream.replace 'entry_#{@entry.id}_username_reveal' do %>
+      <%= turbo_frame_tag 'entry_#{@entry.id}_username_reveal' do %>
+        <div class='flex items-center gap-3'>
+          <p class='text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded'><%= '#{@value}' %></p>
+          <%= button_to 'Hide', mask_username_entry_path(@entry), method: :post,
+              form: { data: { turbo_stream: true } },
+              class: 'rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50' %>
+        </div>
+      <% end %>
+    <% end %>", type: :erb, layout: false
   rescue => e
     Rails.logger.error("Error in reveal_username for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
@@ -116,17 +109,8 @@ def reveal_password
   return head(:not_found) unless @entry
 
   begin
-    Rails.logger.info("Revealing password for entry #{@entry.id} by user #{current_user.id}")
-
-    # Check encryption keys before attempting to decrypt
-    Rails.logger.info("Encryption keys present: " +
-                     "primary=#{ActiveRecord::Encryption.config.primary_key.present?}, " +
-                     "deterministic=#{ActiveRecord::Encryption.config.deterministic_key.present?}, " +
-                     "salt=#{ActiveRecord::Encryption.config.key_derivation_salt.present?}")
-
-    # Try to decrypt the password
+    # Simplify the reveal process
     @value = @entry.password
-    Rails.logger.info("Successfully decrypted password for entry #{@entry.id}")
 
     # Create audit event
     AuditEvent.create!(
@@ -136,16 +120,18 @@ def reveal_password
       ip: request.remote_ip,
       user_agent: request.user_agent
     )
-    Rails.logger.info("Created audit event for reveal_password")
 
-    # Schedule auto-mask job
-    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
-    Rails.logger.info("Scheduled auto-mask job for password")
-
-    # Render the turbo stream template
-    Rails.logger.info("Rendering reveal_password turbo_stream template")
-    render "entries/reveal_password", formats: :turbo_stream, layout: false
-    Rails.logger.info("Successfully rendered reveal_password template")
+    # Render the turbo stream template directly
+    render inline: "<%= turbo_stream.replace 'entry_#{@entry.id}_password_reveal' do %>
+      <%= turbo_frame_tag 'entry_#{@entry.id}_password_reveal' do %>
+        <div class='flex items-center gap-3'>
+          <p class='text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded'><%= '#{@value}' %></p>
+          <%= button_to 'Hide', mask_password_entry_path(@entry), method: :post,
+              form: { data: { turbo_stream: true } },
+              class: 'rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50' %>
+        </div>
+      <% end %>
+    <% end %>", type: :erb, layout: false
   rescue => e
     Rails.logger.error("Error in reveal_password for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
