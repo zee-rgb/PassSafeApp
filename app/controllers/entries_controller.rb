@@ -73,40 +73,68 @@ class EntriesController < ApplicationController
 # Turbo reveal endpoints (POST to allow CSRF protection and logging)
 def reveal_username
   return head(:not_found) unless @entry
+  Rails.logger.debug("Attempting to reveal username for entry #{@entry.id}")
+  Rails.logger.debug("Entry attributes: #{@entry.attributes.except('username', 'password').inspect}")
+  Rails.logger.debug("Current encryption keys: Primary: #{ActiveRecord::Encryption.config.primary_key.present? ? 'Present' : 'Missing'}, Deterministic: #{ActiveRecord::Encryption.config.deterministic_key.present? ? 'Present' : 'Missing'}")
+
   @value = begin
-    @entry.username
+    username = @entry.username
+    Rails.logger.debug("Username revealed successfully")
+    username
   rescue => e
     Rails.logger.error("Error revealing username: #{e.class} - #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
     nil
   end
-  AuditEvent.create!(
-    user: current_user,
-    entry: @entry,
-    action: "reveal_username",
-    ip: request.remote_ip,
-    user_agent: request.user_agent
-  )
-  AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
-  render "entries/reveal_username", formats: :turbo_stream, layout: false
+
+  begin
+    AuditEvent.create!(
+      user: current_user,
+      entry: @entry,
+      action: "reveal_username",
+      ip: request.remote_ip,
+      user_agent: request.user_agent
+    )
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
+    render "entries/reveal_username", formats: :turbo_stream, layout: false
+  rescue => e
+    Rails.logger.error("Error in reveal_username action: #{e.class} - #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
+    head :internal_server_error
+  end
 end
 
 def reveal_password
   return head(:not_found) unless @entry
+  Rails.logger.debug("Attempting to reveal password for entry #{@entry.id}")
+  Rails.logger.debug("Entry attributes: #{@entry.attributes.except('username', 'password').inspect}")
+  Rails.logger.debug("Current encryption keys: Primary: #{ActiveRecord::Encryption.config.primary_key.present? ? 'Present' : 'Missing'}, Deterministic: #{ActiveRecord::Encryption.config.deterministic_key.present? ? 'Present' : 'Missing'}")
+
   @value = begin
-    @entry.password
+    password = @entry.password
+    Rails.logger.debug("Password revealed successfully")
+    password
   rescue => e
     Rails.logger.error("Error revealing password: #{e.class} - #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
     nil
   end
-  AuditEvent.create!(
-    user: current_user,
-    entry: @entry,
-    action: "reveal_password",
-    ip: request.remote_ip,
-    user_agent: request.user_agent
-  )
-  AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
-  render "entries/reveal_password", formats: :turbo_stream, layout: false
+
+  begin
+    AuditEvent.create!(
+      user: current_user,
+      entry: @entry,
+      action: "reveal_password",
+      ip: request.remote_ip,
+      user_agent: request.user_agent
+    )
+    AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
+    render "entries/reveal_password", formats: :turbo_stream, layout: false
+  rescue => e
+    Rails.logger.error("Error in reveal_password action: #{e.class} - #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
+    head :internal_server_error
+  end
 end
 
   def mask_username

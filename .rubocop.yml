@@ -1,8 +1,20 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+AllCops:
+  NewCops: enable
+  Exclude:
+    - "bin/**/*"
+    - "db/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "**/*.erb" # Exclude ERB files from RuboCop checks
+
+# Use double quotes for string literals as required by GitHub
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Use spaces inside array brackets
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: space

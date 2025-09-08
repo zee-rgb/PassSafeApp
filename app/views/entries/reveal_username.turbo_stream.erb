@@ -1,5 +1,15 @@
 <%= turbo_stream.replace "entry_#{@entry.id}_username_reveal" do %>
   <%= turbo_frame_tag "entry_#{@entry.id}_username_reveal" do %>
-    <%= render "entries/reveals/username", entry: @entry, value: @value %>
+    <div class="flex items-center gap-3">
+      <% if defined?(@value) && @value.present? %>
+        <div class="flex items-center gap-3">
+          <p class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded"><%= @value %></p>
+          <%= button_to "Hide", mask_username_entry_path(@entry), method: :post, form: { data: { turbo_stream: true, turbo_frame: "entry_#{@entry.id}_username_reveal" } }, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50" %>
+          <span class="text-xs text-gray-500">Auto-hide in <span class="font-medium">5s</span></span>
+        </div>
+      <% else %>
+        <p class="text-sm text-red-700 bg-red-50 px-3 py-2 rounded">Unable to reveal username for this entry</p>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
