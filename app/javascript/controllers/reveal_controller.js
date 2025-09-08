@@ -1,7 +1,9 @@
 // Reveal controller for handling password and username reveal/hide functionality
 document.addEventListener("DOMContentLoaded", function() {
     // Get CSRF token for API requests
-    const csrfToken = document.querySelector('meta[name="csrf-token"]') ? .content;
+    const csrfToken =
+        document.querySelector('meta[name="csrf-token"]') &&
+        document.querySelector('meta[name="csrf-token"]').content;
     if (!csrfToken) return;
 
     // Get entry ID from the page
