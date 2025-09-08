@@ -39,9 +39,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_000001) do
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
-  create_table "solid_cache_tables", force: :cascade do |t|
+  create_table "solid_cache_entries", force: :cascade do |t|
+    t.string "key", null: false
+    t.binary "value", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "expires_at"
+    t.index ["expires_at"], name: "index_solid_cache_entries_on_expires_at"
+    t.index ["key"], name: "index_solid_cache_entries_on_key", unique: true
+  end
+
+  create_table "solid_cache_versions", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "version", null: false
+    t.datetime "created_at", null: false
+    t.index ["key", "version"], name: "index_solid_cache_versions_on_key_and_version", unique: true
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
