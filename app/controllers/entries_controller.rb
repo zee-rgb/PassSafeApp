@@ -93,17 +93,10 @@ def reveal_username
       user_agent: request.user_agent
     )
 
-    # Render the turbo stream template directly
-    render inline: "<%= turbo_stream.replace 'entry_#{@entry.id}_username_reveal' do %>
-      <%= turbo_frame_tag 'entry_#{@entry.id}_username_reveal' do %>
-        <div class='flex items-center gap-3'>
-          <p class='text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded'><%= '#{@value}' %></p>
-          <%= button_to 'Hide', mask_username_entry_path(@entry), method: :post,
-              form: { data: { turbo_stream: true } },
-              class: 'rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50' %>
-        </div>
-      <% end %>
-    <% end %>", type: :erb, layout: false
+    # Use the turbo_stream template
+    respond_to do |format|
+      format.turbo_stream
+    end
   rescue => e
     Rails.logger.error("Error in reveal_username for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
@@ -133,17 +126,10 @@ def reveal_password
       user_agent: request.user_agent
     )
 
-    # Render the turbo stream template directly
-    render inline: "<%= turbo_stream.replace 'entry_#{@entry.id}_password_reveal' do %>
-      <%= turbo_frame_tag 'entry_#{@entry.id}_password_reveal' do %>
-        <div class='flex items-center gap-3'>
-          <p class='text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded'><%= '#{@value}' %></p>
-          <%= button_to 'Hide', mask_password_entry_path(@entry), method: :post,
-              form: { data: { turbo_stream: true } },
-              class: 'rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50' %>
-        </div>
-      <% end %>
-    <% end %>", type: :erb, layout: false
+    # Use the turbo_stream template
+    respond_to do |format|
+      format.turbo_stream
+    end
   rescue => e
     Rails.logger.error("Error in reveal_password for entry #{@entry.id}: #{e.message}")
     Rails.logger.error(e.backtrace.join("\n"))
