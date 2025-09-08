@@ -68,3 +68,4 @@ end
 gem "devise", "~> 4.9"
 # Basic rate limiting and abuse protection
 gem "rack-attack"
+gem "solid_queue", "~> 0.5.0"
