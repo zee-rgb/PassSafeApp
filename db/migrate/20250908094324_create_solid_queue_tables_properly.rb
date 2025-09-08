@@ -12,12 +12,11 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.string :concurrency_key
       t.datetime :created_at, null: false
       t.datetime :updated_at, null: false
-      
-      t.index [:active_job_id]
-      t.index [:class_name]
-      t.index [:finished_at]
-      t.index [:queue_name, :finished_at], name: 'index_solid_queue_jobs_for_filtering'
-      t.index [:scheduled_at, :finished_at], name: 'index_solid_queue_jobs_for_alerting'
+      t.index [ :active_job_id ]
+      t.index [ :class_name ]
+      t.index [ :finished_at ]
+      t.index [ :queue_name, :finished_at ], name: 'index_solid_queue_jobs_for_filtering'
+      t.index [ :scheduled_at, :finished_at ], name: 'index_solid_queue_jobs_for_alerting'
     end
 
     # Scheduled Executions
@@ -28,7 +27,7 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.datetime :scheduled_at, null: false
       t.datetime :created_at, null: false
       
-      t.index %i[scheduled_at priority job_id], name: 'index_solid_queue_dispatch_all'
+      t.index [ :scheduled_at, :priority, :job_id ], name: 'index_solid_queue_dispatch_all'
     end
 
     # Ready Executions
@@ -38,8 +37,8 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.integer :priority, default: 0, null: false
       t.datetime :created_at, null: false
       
-      t.index %i[priority job_id], name: 'index_solid_queue_poll_all'
-      t.index %i[queue_name priority job_id], name: 'index_solid_queue_poll_by_queue'
+      t.index [ :priority, :job_id ], name: 'index_solid_queue_poll_all'
+      t.index [ :queue_name, :priority, :job_id ], name: 'index_solid_queue_poll_by_queue'
     end
 
     # Blocked Executions
@@ -51,8 +50,8 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.datetime :expires_at, null: false
       t.datetime :created_at, null: false
       
-      t.index %i[concurrency_key priority job_id], name: 'index_solid_queue_blocked_executions_for_release'
-      t.index %i[expires_at concurrency_key], name: 'index_solid_queue_blocked_executions_for_maintenance'
+      t.index [ :concurrency_key, :priority, :job_id ], name: 'index_solid_queue_blocked_executions_for_release'
+      t.index [ :expires_at, :concurrency_key ], name: 'index_solid_queue_blocked_executions_for_maintenance'
     end
 
     # Claimed Executions
@@ -61,7 +60,7 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.bigint :process_id
       t.datetime :created_at, null: false
       
-      t.index %i[process_id job_id]
+      t.index [ :process_id, :job_id ]
     end
 
     # Failed Executions
@@ -76,7 +75,7 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.string :queue_name, null: false
       t.datetime :created_at, null: false
       
-      t.index [:queue_name], unique: true
+      t.index [ :queue_name ], unique: true
     end
 
     # Processes
@@ -90,9 +89,9 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.string :name, null: false
       t.datetime :created_at, null: false
       
-      t.index [:last_heartbeat_at]
-      t.index %i[name supervisor_id], unique: true
-      t.index [:supervisor_id]
+      t.index [ :last_heartbeat_at ]
+      t.index [ :name, :supervisor_id ], unique: true
+      t.index [ :supervisor_id ]
     end
 
     # Recurring Tasks
@@ -108,9 +107,8 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.text :description
       t.datetime :created_at, null: false
       t.datetime :updated_at, null: false
-      
-      t.index [:key], unique: true
-      t.index [:static]
+      t.index [ :key ], unique: true
+      t.index [ :static ]
     end
 
     # Recurring Executions
@@ -120,7 +118,7 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.datetime :run_at, null: false
       t.datetime :created_at, null: false
       
-      t.index %i[task_key run_at], unique: true
+      t.index [ :task_key, :run_at ], unique: true
     end
 
     # Semaphores
@@ -130,10 +128,9 @@ class CreateSolidQueueTablesProperly < ActiveRecord::Migration[8.0]
       t.datetime :expires_at, null: false
       t.datetime :created_at, null: false
       t.datetime :updated_at, null: false
-      
-      t.index [:expires_at]
-      t.index %i[key value]
-      t.index [:key], unique: true
+      t.index [ :expires_at ]
+      t.index [ :key, :value ]
+      t.index [ :key ], unique: true
     end
   end
 end
