@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # Development-only diagnostic routes
+  if Rails.env.development?
+    get "diagnostic/encryption_keys"
+  end
+
   scope "(:locale)", locale: /en|es|fr|pt|id|zh|ja/ do
     devise_for :users, path: "secure", controllers: {
       registrations: "users/registrations",

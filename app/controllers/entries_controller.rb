@@ -75,8 +75,19 @@ def reveal_username
   return head(:not_found) unless @entry
 
   begin
-    @value = @entry.username
+    Rails.logger.info("Revealing username for entry #{@entry.id} by user #{current_user.id}")
 
+    # Check encryption keys before attempting to decrypt
+    Rails.logger.info("Encryption keys present: " +
+                     "primary=#{ActiveRecord::Encryption.config.primary_key.present?}, " +
+                     "deterministic=#{ActiveRecord::Encryption.config.deterministic_key.present?}, " +
+                     "salt=#{ActiveRecord::Encryption.config.key_derivation_salt.present?}")
+
+    # Try to decrypt the username
+    @value = @entry.username
+    Rails.logger.info("Successfully decrypted username for entry #{@entry.id}")
+
+    # Create audit event
     AuditEvent.create!(
       user: current_user,
       entry: @entry,
@@ -84,11 +95,19 @@ def reveal_username
       ip: request.remote_ip,
       user_agent: request.user_agent
     )
+    Rails.logger.info("Created audit event for reveal_username")
 
+    # Schedule auto-mask job
     AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "username")
+    Rails.logger.info("Scheduled auto-mask job for username")
+
+    # Render the turbo stream template
+    Rails.logger.info("Rendering reveal_username turbo_stream template")
     render "entries/reveal_username", formats: :turbo_stream, layout: false
+    Rails.logger.info("Successfully rendered reveal_username template")
   rescue => e
-    Rails.logger.error("Error in reveal_username: #{e.message}")
+    Rails.logger.error("Error in reveal_username for entry #{@entry.id}: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
     head :internal_server_error
   end
 end
@@ -97,8 +116,19 @@ def reveal_password
   return head(:not_found) unless @entry
 
   begin
-    @value = @entry.password
+    Rails.logger.info("Revealing password for entry #{@entry.id} by user #{current_user.id}")
 
+    # Check encryption keys before attempting to decrypt
+    Rails.logger.info("Encryption keys present: " +
+                     "primary=#{ActiveRecord::Encryption.config.primary_key.present?}, " +
+                     "deterministic=#{ActiveRecord::Encryption.config.deterministic_key.present?}, " +
+                     "salt=#{ActiveRecord::Encryption.config.key_derivation_salt.present?}")
+
+    # Try to decrypt the password
+    @value = @entry.password
+    Rails.logger.info("Successfully decrypted password for entry #{@entry.id}")
+
+    # Create audit event
     AuditEvent.create!(
       user: current_user,
       entry: @entry,
@@ -106,11 +136,19 @@ def reveal_password
       ip: request.remote_ip,
       user_agent: request.user_agent
     )
+    Rails.logger.info("Created audit event for reveal_password")
 
+    # Schedule auto-mask job
     AutoMaskEntryJob.set(wait: 5.seconds).perform_later(@entry.id, "password")
+    Rails.logger.info("Scheduled auto-mask job for password")
+
+    # Render the turbo stream template
+    Rails.logger.info("Rendering reveal_password turbo_stream template")
     render "entries/reveal_password", formats: :turbo_stream, layout: false
+    Rails.logger.info("Successfully rendered reveal_password template")
   rescue => e
-    Rails.logger.error("Error in reveal_password: #{e.message}")
+    Rails.logger.error("Error in reveal_password for entry #{@entry.id}: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
     head :internal_server_error
   end
 end
