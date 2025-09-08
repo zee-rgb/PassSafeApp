@@ -144,6 +144,7 @@ config/credentials/*.yml.enc
 .dockerignore
 Dockerfile
 docker-compose*.yml
+bin/docker-entrypoint
 
 # Terraform
 *.tfstate
@@ -165,6 +166,14 @@ passwords.txt
 /script/test_encryption.rb
 /test_encryption.rb
 puts*.log
+new.sh
+render-build.sh
+/script/generate_encryption_keys.rb
+/script/check_encryption_keys.rb
+/script/check_database_config.rb
+/script/add_key_hash_column.rb
+/script/fix_production_db.sh
+/script/reencrypt_entries.rb
 
 # Documentation with sensitive information
 GITHUB_SETUP.md
