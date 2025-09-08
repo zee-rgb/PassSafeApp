@@ -12,9 +12,9 @@ creds = Rails.application.credentials.dig(:active_record_encryption)
 
 # In test, ensure deterministic dummy keys if none provided
 test_defaults = Rails.env.test? ? {
-  primary_key: "0" * 32,
-  deterministic_key: "1" * 32,
-  key_derivation_salt: "2" * 32
+  primary_key: "0" * 64,
+  deterministic_key: "1" * 64,
+  key_derivation_salt: "2" * 64
 } : {}
 
 c.primary_key ||= ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"] || creds&.fetch(:primary_key, nil) || test_defaults[:primary_key]

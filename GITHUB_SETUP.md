@@ -1,62 +1,61 @@
 # GitHub Actions Setup Guide
 
-This document explains how to set up the required GitHub secrets for the CI workflow to run successfully.
+This document explains how the CI workflow is configured to run tests successfully.
 
-## Required Secrets
+## Test Environment Configuration
 
-The GitHub Actions workflow requires the following secrets to be set up in your repository:
+The GitHub Actions workflow uses predefined encryption keys for the test environment:
 
-1. `RAILS_MASTER_KEY` - The master key used to decrypt the Rails credentials
-2. `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY` - The primary key for Active Record encryption
-3. `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY` - The deterministic key for Active Record encryption
-4. `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` - The key derivation salt for Active Record encryption
-
-## Setting Up the Secrets
-
-1. Go to your GitHub repository
-2. Click on "Settings"
-3. In the left sidebar, click on "Secrets and variables" > "Actions"
-4. Click on "New repository secret"
-5. Add each of the required secrets with their respective values
-
-### Secret Values
-
-You can get the values for these secrets from your local development environment:
-
-#### RAILS_MASTER_KEY
-
-This is the content of your `config/master.key` file:
-
-```bash
-cat config/master.key
+```yaml
+env:
+  RAILS_ENV: test
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/pass_safe_app_test
+  # Test-specific encryption keys for CI
+  ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+  ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: "1111111111111111111111111111111111111111111111111111111111111111"
+  ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: "2222222222222222222222222222222222222222222222222222222222222222"
 ```
 
-#### Active Record Encryption Keys
+These keys match the default test keys defined in `config/initializers/active_record_encryption.rb`.
 
-These are the keys you've set up in your Rails credentials. You can view them with:
+## Production Environment Setup
+
+For production deployment on Render, you'll need to set the following environment variables:
+
+1. `RAILS_MASTER_KEY` - The master key used to decrypt the Rails credentials
+2. `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY` - The 64-character primary key for encryption
+3. `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY` - The 64-character deterministic key
+4. `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` - The 64-character key derivation salt
+
+You can get these values from your local development environment:
 
 ```bash
+# Master key
+cat config/master.key
+
+# Encryption keys
 bin/rails credentials:show
 ```
 
-Look for the `active_record_encryption` section and copy the values for:
+## Important Notes
 
-- `primary_key`
-- `deterministic_key`
-- `key_derivation_salt`
-
-**Important:** Make sure the encryption keys are 64-character hex strings (32 bytes). If they are shorter, they need to be updated as described in the fix for the Render deployment.
-
-## Verifying the Setup
-
-After setting up all the secrets, trigger a new CI run by pushing a commit to your repository. The workflow should now be able to access the encryption keys and run successfully.
+1. **Key Length**: All encryption keys must be 64-character hex strings (32 bytes)
+2. **Test Environment**: The test environment uses hardcoded keys for CI
+3. **Local Development**: Your local environment should use the keys from credentials
 
 ## Troubleshooting
 
-If you continue to see the "key must be 16 bytes" error, check that:
+If you see the "key must be 16 bytes" error:
 
-1. All secrets are correctly set in GitHub
-2. The encryption keys are 64-character hex strings (32 bytes)
-3. The workflow is correctly referencing the secrets
+1. Check that encryption keys are 64-character hex strings
+2. Ensure the correct environment variables are set
+3. Verify that the test environment has the correct default keys
 
-Remember that any changes to the encryption keys in your local environment need to be synchronized with the GitHub secrets for CI to work properly.
+For local testing, you can set environment variables directly:
+
+```bash
+ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="0000000000000000000000000000000000000000000000000000000000000000" \
+ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="1111111111111111111111111111111111111111111111111111111111111111" \
+ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="2222222222222222222222222222222222222222222222222222222222222222" \
+bin/rails test
+```
