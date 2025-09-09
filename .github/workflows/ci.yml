@@ -32,7 +32,7 @@ jobs:
       ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: "2222222222222222222222222222222222222222222222222222222222222222"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
