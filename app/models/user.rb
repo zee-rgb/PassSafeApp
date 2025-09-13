@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :entries, dependent: :destroy
+  has_many :audit_events, dependent: :destroy
 end
