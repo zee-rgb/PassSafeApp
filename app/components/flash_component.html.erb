@@ -1,0 +1,6 @@
+<% @flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="mb-3 rounded-md border px-4 py-2 text-sm <%= flash_class(type) %>">
+    <%= message %>
+  </div>
+<% end %>

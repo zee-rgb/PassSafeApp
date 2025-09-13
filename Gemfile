@@ -68,4 +68,6 @@ end
 gem "devise", "~> 4.9"
 # Basic rate limiting and abuse protection
 gem "rack-attack"
-gem "solid_queue", "~> 1.2.1"
+
+# Add ViewComponent for building reusable, testable & encapsulated view components
+gem "view_component", "~> 3.11"
