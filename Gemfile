@@ -70,4 +70,4 @@ gem "devise", "~> 4.9"
 gem "rack-attack"
 
 # Add ViewComponent for building reusable, testable & encapsulated view components
-gem "view_component", "~> 3.11"
+gem "view_component", "~> 4.0"
