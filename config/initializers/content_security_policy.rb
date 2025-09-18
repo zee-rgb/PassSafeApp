@@ -12,7 +12,7 @@ Rails.application.configure do
     policy.object_src  :none
     policy.frame_ancestors :none
     # Importmap/Turbo operate as module scripts; allow self + https with nonces + unsafe-inline
-    policy.script_src  :self, :https, :unsafe_inline, :nonce
+    policy.script_src  :self, :https, :unsafe_inline
     policy.style_src   :self, :https, :unsafe_inline
     # XHR/Fetch destinations (Turbo Streams, APIs)
     policy.connect_src :self, :https
