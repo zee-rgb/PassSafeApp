@@ -12,9 +12,9 @@
 
       <div class="space-y-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+          <label for="entry-url" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
           <div class="flex items-center gap-3">
-            <p class="text-gray-900 truncate"><%= @entry.url %></p>
+            <p id="entry-url" class="text-gray-900 truncate"><%= @entry.url %></p>
             <%= link_to "Open", @entry.url, target: "_blank", class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
           </div>
         </div>
@@ -22,24 +22,24 @@
         <input type="hidden" id="entry-id" value="<%= @entry.id %>">
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+          <label for="username-value" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
           <div id="username-container" class="flex items-center gap-3">
-            <p class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
+            <p id="username-value" class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
             <button id="reveal-username-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Reveal</button>
             <button id="hide-username-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50 hidden">Hide</button>
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <label for="password-value" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
           <div id="password-container" class="flex items-center gap-3">
-            <p class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
+            <p id="password-value" class="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">••••••••</p>
             <button id="reveal-password-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50">Reveal</button>
             <button id="hide-password-btn" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm border border-gray-300 hover:bg-gray-50 hidden">Hide</button>
           </div>
         </div>
 
-        <%= javascript_include_tag "controllers/reveal_controller" %>
+        <% # Using importmap to load the reveal controller - handled by application.js %>
       </div>
 
       <div class="flex items-center justify-between mt-8">

@@ -1,9 +1,7 @@
 // Reveal controller for handling password and username reveal/hide functionality
 document.addEventListener("DOMContentLoaded", function() {
     // Get CSRF token for API requests
-    const csrfToken =
-        document.querySelector('meta[name="csrf-token"]') &&
-        document.querySelector('meta[name="csrf-token"]').content;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
     if (!csrfToken) return;
 
     // Get entry ID from the page
@@ -40,7 +38,7 @@ function setupRevealHide(type, entryId, csrfToken) {
             })
             .then((response) => response.json())
             .then((data) => {
-                const valueElement = container.querySelector("p");
+                const valueElement = document.getElementById(`${type}-value`);
                 if (valueElement) {
                     valueElement.textContent = data.value;
                 }
@@ -57,7 +55,8 @@ function setupRevealHide(type, entryId, csrfToken) {
                 }, 5000);
             })
             .catch((error) => {
-                console.error(`Error revealing ${type}:`, error);
+                // Error handling for reveal operation
+                // console.error(`Error revealing ${type}:`, error);
             });
     });
 
@@ -79,7 +78,7 @@ function setupRevealHide(type, entryId, csrfToken) {
             })
             .then((response) => response.json())
             .then((data) => {
-                const valueElement = container.querySelector("p");
+                const valueElement = document.getElementById(`${type}-value`);
                 if (valueElement) {
                     valueElement.textContent = "••••••••";
                 }
@@ -87,7 +86,8 @@ function setupRevealHide(type, entryId, csrfToken) {
                 hideBtn.style.display = "none";
             })
             .catch((error) => {
-                console.error(`Error masking ${type}:`, error);
+                // Error handling for mask operation
+                // console.error(`Error masking ${type}:`, error);
             });
     });
 }
