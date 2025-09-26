@@ -141,7 +141,7 @@ config/credentials/*.yml.enc
 /.turbo
 
 # Docker
-.dockerignore
+dockerignore
 Dockerfile
 docker-compose*.yml
 bin/docker-entrypoint
@@ -161,25 +161,8 @@ bin/docker-entrypoint
 *.pfx
 secrets.txt
 passwords.txt
-
-# Temporary files and scripts
-/script/test_encryption.rb
-/test_encryption.rb
-puts*.log
-new.sh
-render-build.sh
-/script/generate_encryption_keys.rb
-/script/check_encryption_keys.rb
-/script/check_database_config.rb
-/script/add_key_hash_column.rb
-/script/fix_production_db.sh
-/script/reencrypt_entries.rb
-
-# Documentation with sensitive information
-GITHUB_SETUP.md
-DEPLOYMENT_TROUBLESHOOTING.md
-*SETUP*.md
-*_SETUP.md
+/0  # Master key length configuration
+/test_encryption.rb  # Redundant copy in root directory
 
 # Additional Rails 8 patterns
 /.solid_queue/
